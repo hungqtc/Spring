@@ -26,25 +26,25 @@ public class UserController {
 		return userService.getAll();
 	}
 	
-	@GetMapping(value = "/User/{id}")
+	@GetMapping(value = "/user/{id}")
 	public UserDTO getOneById(@PathVariable long id) {
 		return userService.getById(id);
 	}
 	
-	@DeleteMapping(value = "/User/{id}")
+	@DeleteMapping(value = "/user/{id}")
 	public void deleteUser(@PathVariable long id) {
 		userService.delete(id);
 	}
 
-	@PostMapping(value = "/User")
-	public UserDTO insertUser(@RequestBody UserDTO User) {
-		return userService.save(User);
+	@PostMapping(value = "/user")
+	public UserDTO insertUser(@RequestBody UserDTO user) {
+		return userService.save(user);
 	}
 
-	@PutMapping(value = "/User/{id}")
-	public UserDTO editUser(@RequestBody UserDTO User, @PathVariable long id) {
-		User.setId(id);
-		return userService.save(User);
+	@PutMapping(value = "/user/{id}")
+	public UserDTO editUser(@RequestBody UserDTO user, @PathVariable long id) {
+		user.setId(id);
+		return userService.save(user);
 	}
 
 }

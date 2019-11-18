@@ -1,5 +1,6 @@
 package com.hung.service.impls;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,18 @@ import org.springframework.stereotype.Service;
 import com.hung.converter.RoleConverter;
 import com.hung.dto.RoleDTO;
 import com.hung.entity.RoleEntity;
+import com.hung.entity.UserEntity;
 import com.hung.repository.RoleRepository;
+import com.hung.repository.UserRepository;
 import com.hung.service.RoleService;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 	 @Autowired
 	 private RoleRepository roleRepository;
+	 
+	 @Autowired
+	 private UserRepository userRepository;
 	 
 	 @Autowired
 	 private RoleConverter roleConverter;
@@ -32,15 +38,25 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		@Override
-		public RoleDTO save(RoleDTO RoleDTO) {
+		public RoleDTO save(RoleDTO roleDTO) {
 			RoleEntity RoleEntity = new RoleEntity();
 			
-			if (RoleDTO.getId() != null) {
-				RoleEntity oldRoleEntity = roleRepository.findOne(RoleDTO.getId());
-				RoleEntity = roleConverter.toEntity(RoleDTO, oldRoleEntity);
+			if (roleDTO.getId() != null) {
+				RoleEntity oldRoleEntity = roleRepository.findOne(roleDTO.getId());
+				RoleEntity = roleConverter.toEntity(roleDTO, oldRoleEntity);
 			} else {
-				RoleEntity = roleConverter.toEntity(RoleDTO);
+				RoleEntity = roleConverter.toEntity(roleDTO);
 			}
+			ArrayList<String> listUserDTO = (ArrayList<String>) roleDTO.getUsers();
+			ArrayList<UserEntity> listUserEntity = new ArrayList<UserEntity>();
+			for (int i = 0; i < listUserDTO.size(); i++) {
+				
+				UserEntity userEntity = userRepository.findOneByName(listUserDTO.get(i));
+				listUserEntity.add(userEntity);
+			}
+			
+			RoleEntity.setUsers(listUserEntity);
+			
 			RoleEntity = roleRepository.save(RoleEntity);
 			return roleConverter.toDTO(RoleEntity);
 		}

@@ -33,8 +33,8 @@ public class AddressEntity extends BaseEntity{
 
 	private String city;
 	
-	@OneToOne // Đánh dấu có mỗi quan hệ 1-1 với Person ở phía dưới
-    @JoinColumn(name = "user_id") // Liên kết với nhau qua khóa ngoại person_id
+	@OneToOne 
+    @JoinColumn(name = "user_id") 
     private UserEntity user; 
 	
 }

@@ -1,5 +1,6 @@
 package com.hung.service.impls;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.hung.converter.UserConverter;
 import com.hung.dto.UserDTO;
+import com.hung.entity.RoleEntity;
 import com.hung.entity.UserEntity;
+import com.hung.repository.RoleRepository;
 import com.hung.repository.UserRepository;
 import com.hung.service.UserService;
 
@@ -15,6 +18,9 @@ import com.hung.service.UserService;
 public class UserServiceImpl implements UserService {
 	 @Autowired
 	 private UserRepository userRepository;
+	 
+	 @Autowired
+	 private RoleRepository roleRepository;
 	 
 	 @Autowired
 	 private UserConverter userConverter;
@@ -32,21 +38,31 @@ public class UserServiceImpl implements UserService {
 		}
 
 		@Override
-		public UserDTO save(UserDTO UserDTO) {
+		public UserDTO save(UserDTO userDTO) {
 			UserEntity UserEntity = new UserEntity();
 			
-			if (UserDTO.getId() != null) {
-				UserEntity oldUserEntity = userRepository.findOne(UserDTO.getId());
-				UserEntity = userConverter.toEntity(UserDTO, oldUserEntity);
+			if (userDTO.getId() != null) {
+				UserEntity oldUserEntity = userRepository.findOne(userDTO.getId());
+				UserEntity = userConverter.toEntity(userDTO, oldUserEntity);
 			} else {
-				UserEntity = userConverter.toEntity(UserDTO);
+				UserEntity = userConverter.toEntity(userDTO);
 			}
+			
+			ArrayList<String> listRole = (ArrayList<String>) userDTO.getRoles();
+			ArrayList<RoleEntity> listRoleEntity = new ArrayList<RoleEntity>();
+			for (int i = 0; i < listRole.size(); i++) {
+				
+				RoleEntity roleEntity = roleRepository.findOneByName(listRole.get(i));
+				listRoleEntity.add(roleEntity);
+			}
+			
+			UserEntity.setRoles(listRoleEntity);
 			UserEntity = userRepository.save(UserEntity);
 			return UserConverter.toDTO(UserEntity);
 		}
 
 		@Override
-		public void delete(Long UserId) {
-			userRepository.delete(UserId);
+		public void delete(Long userId) {
+			userRepository.delete(userId);
 		}
 }

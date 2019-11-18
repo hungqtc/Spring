@@ -17,5 +17,5 @@ import lombok.Setter;
 public class RoleDTO extends AbstractDTO{
 	private String name;
 	
-	private List<String> users = new ArrayList();
+	ArrayList<String> users = new ArrayList<String>();
 }

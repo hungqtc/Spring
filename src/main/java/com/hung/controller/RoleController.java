@@ -37,14 +37,14 @@ public class RoleController {
 	}
 
 	@PostMapping(value = "/role")
-	public RoleDTO insertRole(@RequestBody RoleDTO Role) {
-		return roleService.save(Role);
+	public RoleDTO insertRole(@RequestBody RoleDTO role) {
+		return roleService.save(role);
 	}
 
 	@PutMapping(value = "/role/{id}")
-	public RoleDTO editRole(@RequestBody RoleDTO Role, @PathVariable long id) {
-		Role.setId(id);
-		return roleService.save(Role);
+	public RoleDTO editRole(@RequestBody RoleDTO role, @PathVariable long id) {
+		role.setId(id);
+		return roleService.save(role);
 	}
 
 }
