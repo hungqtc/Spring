@@ -4,6 +4,7 @@ package com.hung.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,16 +22,19 @@ public class RoleController {
 	@Autowired
 	RoleService roleService;
 
+	@PreAuthorize("hasRole('ADMIN')")
+
 	@GetMapping(value = "/role")
 	public List<RoleDTO> getAll() {
 		return roleService.getAll();
+
 	}
-	
+
 	@GetMapping(value = "/role/{id}")
 	public RoleDTO getOneById(@PathVariable long id) {
 		return roleService.getById(id);
 	}
-	
+
 	@DeleteMapping(value = "/role/{id}")
 	public void deleteRole(@PathVariable long id) {
 		roleService.delete(id);

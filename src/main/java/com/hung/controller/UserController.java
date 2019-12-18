@@ -4,6 +4,7 @@ package com.hung.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +26,12 @@ public class UserController {
 	public List<UserDTO> getAll() {
 		return userService.getAll();
 	}
-	
+
 	@GetMapping(value = "/user/{id}")
 	public UserDTO getOneById(@PathVariable long id) {
 		return userService.getById(id);
 	}
-	
+
 	@DeleteMapping(value = "/user/{id}")
 	public void deleteUser(@PathVariable long id) {
 		userService.delete(id);
@@ -38,6 +39,10 @@ public class UserController {
 
 	@PostMapping(value = "/user")
 	public UserDTO insertUser(@RequestBody UserDTO user) {
+		if (userService.hadUser(user)) {
+			return null;
+		}
+
 		return userService.save(user);
 	}
 

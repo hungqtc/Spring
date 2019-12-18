@@ -1,3 +1,4 @@
+
 package com.hung.converter;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class RoleConverter {
 			dto.setId(entity.getId());
 		}
 		dto.setName(entity.getName());
-		
-		List<UserEntity> listUser = entity.getUsers();
+
+		List<UserEntity> listUser = entity.getUser();
 		for (UserEntity userEntity : listUser) {
 			listString.add(userEntity.getName());
 		}
@@ -41,14 +42,14 @@ public class RoleConverter {
 		entity.setName(dto.getName());
 		return entity;
 	}
-	
+
 	public List<RoleDTO> toDTO(List<RoleEntity> listEntity) {
 		List<RoleDTO> listDTO = new ArrayList<RoleDTO>();
 		for (RoleEntity entity : listEntity) {
 			listDTO.add(toDTO(entity));
 		}
 		return listDTO;
-				
+
 	}
 
 }

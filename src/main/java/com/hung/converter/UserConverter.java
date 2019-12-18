@@ -1,8 +1,13 @@
+
 package com.hung.converter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.hung.dto.UserDTO;
@@ -11,8 +16,13 @@ import com.hung.entity.UserEntity;
 
 @Component
 public class UserConverter {
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	public UserEntity toEntity(UserDTO dto) {
 		UserEntity entity = new UserEntity();
+		entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 		entity.setName(dto.getName());
 		return entity;
 	}
@@ -24,7 +34,7 @@ public class UserConverter {
 			dto.setId(entity.getId());
 		}
 		dto.setName(entity.getName());
-		
+
 		List<RoleEntity> listRole = entity.getRoles();
 		for (RoleEntity roleEntity : listRole) {
 			listString.add(roleEntity.getName());
@@ -39,16 +49,17 @@ public class UserConverter {
 
 	public UserEntity toEntity(UserDTO dto, UserEntity entity) {
 		entity.setName(dto.getName());
+		entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 		return entity;
 	}
-	
+
 	public List<UserDTO> toDTO(List<UserEntity> listEntity) {
 		List<UserDTO> listDTO = new ArrayList<UserDTO>();
 		for (UserEntity entity : listEntity) {
 			listDTO.add(toDTO(entity));
 		}
 		return listDTO;
-				
+
 	}
 
 }
